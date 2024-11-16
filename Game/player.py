@@ -1,3 +1,5 @@
+# player.py Version 2
+
 import pygame
 
 class Player:

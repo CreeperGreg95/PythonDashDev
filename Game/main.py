@@ -1,3 +1,5 @@
+# main.py Version 2
+
 import pygame
 from player import Player
 from icons import load_player_icon
