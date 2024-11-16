@@ -1,4 +1,4 @@
-# main.py version 4
+# main.py version 5
 
 import pygame
 from player import Player
@@ -7,7 +7,7 @@ from obstacles import Obstacle
 from backgrounds import load_background, draw_background
 from options import GameOptions
 from keybinds import handle_event
-from grounds import Ground  # Importer la classe Ground
+from grounds import Ground  # Importation de la classe Ground
 
 # Initialisation de Pygame et des options de jeu
 pygame.init()
@@ -28,8 +28,8 @@ player = Player(icon, ground_height)
 # Crée l'obstacle en passant également ground_height
 obstacle = Obstacle(800, options.obstacle_speed, ground_height)
 
-# Crée le sol
-ground = Ground(800, 400, ground_height)
+# Crée le sol avec 5000 textures
+ground = Ground(800, 400, ground_height, texture_count=5000)
 
 # Boucle de jeu
 running = True
@@ -58,8 +58,9 @@ while running:
     player.draw(screen)  # Dessin du joueur
     obstacle.draw(screen, options.show_hitboxes)  # Dessin de l'obstacle et de sa hitbox
 
-    # Dessin du sol
-    ground.draw(screen)
+    # Déplacer et dessiner le sol
+    ground.move(options.obstacle_speed)  # Déplace le sol à la vitesse de l'obstacle
+    ground.draw(screen)  # Dessiner le sol
 
     # Affichage des hitboxes si activées
     if options.show_hitboxes:
