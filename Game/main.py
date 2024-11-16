@@ -87,7 +87,7 @@ while running:
 
     # Mise à jour de l'écran et limitation des FPS
     pygame.display.flip()
-    clock.tick(30)
+    clock.tick(60)
 
 # Quitter Pygame
 pygame.quit()
