@@ -1,4 +1,7 @@
 {
     "git.autofetch": "all",
-    "git.autofetchPeriod": 1
+    "git.autofetchPeriod": 1,
+    "python.analysis.extraPaths": [
+        "./Game"
+    ]
 }
