@@ -1,14 +1,14 @@
-# obstacles.py
+# obstacles.py Version 3
 
 import pygame
 from hitbox import Hitbox
 
 class Obstacle:
-    def __init__(self, x, speed):
+    def __init__(self, x, speed, ground_height):
         self.image = pygame.image.load("resources/spike01.png")
         self.image = pygame.transform.scale(self.image, (45, 45))  # Redimensionne à 45x45 pixels
         self.x = x
-        self.y = 400 - self.image.get_height()  # Place l'obstacle au niveau du sol
+        self.y = 400 - self.image.get_height() - ground_height  # Décalage du sol
         self.speed = speed
 
         # Crée une hitbox triangulaire pour l'obstacle
