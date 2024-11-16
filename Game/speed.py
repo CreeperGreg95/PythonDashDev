@@ -1,4 +1,4 @@
-# Speed.py - gestion de la vitesse.
+# speed.py - gestion de la vitesse.
 
 """
 Vitesse du joueur.
