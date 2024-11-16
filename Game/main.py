@@ -30,8 +30,16 @@ while running:
             running = False
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE:
-                player.jump()
-            if event.key == pygame.K_h:  # Appuyer sur "H" pour activer/désactiver les hitboxes
+                # Le joueur saute (verticalement)
+                player.jump(0)
+            if event.key == pygame.K_LEFT:
+                # Le joueur saute vers la gauche
+                player.jump(-1)
+            if event.key == pygame.K_RIGHT:
+                # Le joueur saute vers la droite
+                player.jump(1)
+            if event.key == pygame.K_h:
+                # Appuyer sur "H" pour activer/désactiver les hitboxes
                 options.toggle_hitboxes()
 
     # Application de la gravité et déplacement des obstacles
@@ -50,10 +58,18 @@ while running:
         print("Game Over!")
         # running = False - désactivé car relou lol
 
+    
+    # Nettoyer l'écran à chaque frame pour éviter les artefacts
+    screen.fill((255, 255, 255))  # Fond blanc (ou une autre couleur de fond)
+
     # Dessin des éléments
-    draw_background(screen, background)
-    player.draw(screen)
-    obstacle.draw(screen, options.show_hitboxes)
+    draw_background(screen, background) #Dessin L'arrière-plan
+    player.draw(screen) #Dessin Le joueur
+    obstacle.draw(screen, options.show_hitboxes) #Dessin L'obstacle
+
+        # Affichage des hitboxes si activées
+    if options.show_hitboxes:
+        pygame.draw.rect(screen, (255, 0, 0), player.get_rect(), 2)  # Dessine la hitbox du joueur en rouge
 
     # Mise à jour de l'écran et limitation des FPS
     pygame.display.flip()
