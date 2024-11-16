@@ -20,7 +20,7 @@ cube_size = 50
 cube_image = pygame.transform.scale(cube_image, (cube_size, cube_size))
 
 spike_image = pygame.image.load("resources/spike01.png")
-spike_width, spike_height = 30, 70
+spike_width, spike_height = 50, 50
 spike_image = pygame.transform.scale(spike_image, (spike_width, spike_height))
 
 # Paramètres du joueur
