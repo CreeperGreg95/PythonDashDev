@@ -1,6 +1,7 @@
 # player.py Version 2
 
 import pygame
+from speed import JUMP_HORIZONTAL_SPEED
 
 class Player:
     def __init__(self, icon):
@@ -18,10 +19,15 @@ class Player:
         self.mask = pygame.mask.from_surface(self.icon)
         self.mask_offset = (self.x, self.y)
 
-    def jump(self):
+    def jump(self, direction):
+        """
+        Permet au joueur de sauter avec une direction horizontale.
+        """
         if not self.is_jumping:
             self.is_jumping = True
             self.velocity_y = -self.jump_strength
+            self.velocity_x = JUMP_HORIZONTAL_SPEED * direction
+            print(f"Jump initiated. Direction: {direction}, Velocity X: {self.velocity_x}, Velocity Y: {self.velocity_y}")
 
     def apply_gravity(self):
         if self.is_jumping:
