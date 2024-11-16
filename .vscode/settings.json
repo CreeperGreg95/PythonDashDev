@@ -3,5 +3,6 @@
     "git.autofetchPeriod": 1,
     "python.analysis.extraPaths": [
         "./Game"
-    ]
+    ],
+    "git.enableSmartCommit": true
 }
