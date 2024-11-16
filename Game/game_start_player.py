@@ -3,7 +3,7 @@ from settings import SCREEN_WIDTH, SCREEN_HEIGHT, GROUND_HEIGHT
 
 class Player:
     def __init__(self):
-        self.image = pygame.image.load("assets/player.png")
+        self.image = pygame.image.load("Resources/icons_kit/cube/Cube1.png")
         self.rect = self.image.get_rect()
         self.rect.x = SCREEN_WIDTH // 4
         self.rect.y = SCREEN_HEIGHT - GROUND_HEIGHT - self.rect.height

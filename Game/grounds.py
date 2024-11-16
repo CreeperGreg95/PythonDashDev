@@ -3,7 +3,7 @@ from settings import SCREEN_WIDTH, SCREEN_HEIGHT, GROUND_HEIGHT
 
 class Ground:
     def __init__(self):
-        self.image = pygame.image.load("assets/ground01.png")
+        self.image = pygame.image.load("Resources/grounds/ground01.png")
         self.rect = self.image.get_rect()
         self.rect.y = SCREEN_HEIGHT - GROUND_HEIGHT
 

@@ -4,7 +4,7 @@ from settings import SCREEN_WIDTH, SCREEN_HEIGHT, GROUND_HEIGHT
 
 class Obstacles:
     def __init__(self):
-        self.image = pygame.image.load("assets/spike01.png")
+        self.image = pygame.image.load("Resources/spike01.png")
         self.obstacles = []
         self.spawn_timer = 0
 
