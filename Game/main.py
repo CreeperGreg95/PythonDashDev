@@ -1,5 +1,4 @@
 import pygame
-import obstacles
 from player import Player
 from icons import load_player_icon
 from obstacles import Obstacle
