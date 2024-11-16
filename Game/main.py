@@ -10,7 +10,7 @@ from options import GameOptions
 # Initialisation de Pygame et des options de jeu
 pygame.init()
 screen = pygame.display.set_mode((800, 400))
-pygame.display.set_caption("Geometry Dash avec Pygame")
+pygame.display.set_caption("Python Dash")
 
 # Chargement des ressources et initialisation des objets
 background = load_background()
