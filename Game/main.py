@@ -47,7 +47,7 @@ while running:
     # Détection de collision
     if player.get_rect().colliderect(obstacle.get_rect()):
         print("Game Over!")
-        running = False
+        # running = False - désactivé car relou lol
 
     # Dessin des éléments
     draw_background(screen, background)
