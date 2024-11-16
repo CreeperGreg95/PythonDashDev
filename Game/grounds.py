@@ -1,9 +1,9 @@
-# grounds.py version 2
+# grounds.py version 3
 
 import pygame
 
 class Ground:
-    def __init__(self, screen_width, screen_height, ground_height, texture_count=50000):
+    def __init__(self, screen_width, screen_height, ground_height, texture_count=50000): #Changer texture_count dans le futur par le calcul de la longueur du niveau. Laisser la valeur comme cela pour être tranquille.
         # Charger l'image du sol
         self.image = pygame.image.load("resources/ground01.png")
         
