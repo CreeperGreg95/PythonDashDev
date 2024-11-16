@@ -8,7 +8,7 @@ class Player:
         self.y = 400 - self.size
         self.velocity_y = 0
         self.jump_strength = 15
-        self.gravity = 1
+        self.gravity = 0.8
         self.is_jumping = False
         self.rotation_angle = 0
 
@@ -25,7 +25,7 @@ class Player:
         if self.is_jumping:
             self.y += self.velocity_y
             self.velocity_y += self.gravity
-            self.rotation_angle += 15
+            self.rotation_angle += 45
             if self.y >= 400 - self.size:
                 self.y = 400 - self.size
                 self.is_jumping = False
