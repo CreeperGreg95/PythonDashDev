@@ -7,6 +7,8 @@ from obstacles import Obstacle
 from backgrounds import load_background, draw_background
 from options import GameOptions
 
+from keybinds import handle_event
+
 # Initialisation de Pygame et des options de jeu
 pygame.init()
 screen = pygame.display.set_mode((800, 400))
@@ -28,19 +30,7 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_SPACE:
-                # Le joueur saute (verticalement)
-                player.jump(0)
-            if event.key == pygame.K_LEFT:
-                # Le joueur saute vers la gauche
-                player.jump(-1)
-            if event.key == pygame.K_RIGHT:
-                # Le joueur saute vers la droite
-                player.jump(1)
-            if event.key == pygame.K_h:
-                # Appuyer sur "H" pour activer/désactiver les hitboxes
-                options.toggle_hitboxes()
+        handle_event(event, player, options) 
 
     # Application de la gravité et déplacement des obstacles
     player.apply_gravity()
