@@ -5,7 +5,7 @@ import pygame
 class Background:
     def __init__(self, screen_width, screen_height, texture_count=5000):
         # Charger l'image du fond
-        self.image = pygame.image.load("resources/bg01.png")
+        self.image = pygame.image.load("resources/backgrounds/bg01.png")
         
         # Redimensionner l'image du fond pour qu'elle prenne la taille de l'écran
         self.image = pygame.transform.scale(self.image, (screen_width, screen_height))

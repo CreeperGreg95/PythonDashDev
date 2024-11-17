@@ -10,7 +10,7 @@ class Obstacle:
         self.screen_height = screen_height
         
         # Charger l'image de l'obstacle et ajuster sa taille
-        self.image = pygame.image.load("resources/spike01.png")
+        self.image = pygame.image.load("resources/editor/obstacles/spike01.png")
         self.image = pygame.transform.scale(self.image, (45, 45))  # Taille fixe des obstacles
         
         # Position de l'obstacle, au bord droit de l'écran

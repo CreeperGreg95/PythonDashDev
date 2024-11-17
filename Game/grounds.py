@@ -5,7 +5,7 @@ import pygame
 class Ground:
     def __init__(self, screen_width, screen_height, ground_height, texture_count=50000):
         # Charger l'image du sol
-        self.image = pygame.image.load("resources/ground01.png")
+        self.image = pygame.image.load("resources/grounds/ground01.png")
         
         # Redimensionner l'image pour qu'elle conserve sa taille d'origine sans étirement
         self.image = pygame.transform.scale(self.image, (self.image.get_width(), self.image.get_height()))
