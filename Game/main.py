@@ -16,8 +16,8 @@ screen = pygame.display.set_mode((options.screen_width, options.screen_height))
 pygame.display.set_caption("Python Dash")
 
 # Chargement des ressources et initialisation des objets
-player = Player(load_player_icon(), options.screen_height // 8)  # Calcul du décalage du sol
-obstacle = Obstacle(options.screen_width, options.obstacle_speed, options.screen_height // 8)
+player = Player(load_player_icon(), options.screen_height // 8, options.screen_height)  # Passer screen_height ici
+obstacle = Obstacle(options.screen_width, options.screen_height, options.obstacle_speed, options.screen_height // 8)
 ground = Ground(options.screen_width, options.screen_height, options.screen_height // 8, texture_count=5000)
 background = Background(options.screen_width, options.screen_height, texture_count=5000)
 
@@ -28,12 +28,24 @@ BACKGROUND_SPEED = options.obstacle_speed * options.background_speed_factor  # L
 running = True
 clock = pygame.time.Clock()
 
+# Sauvegarde de la taille initiale de l'écran pour référence
+initial_screen_height = options.screen_height
+
 while running:
     # Gestion des événements
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
         handle_event(event, player, options)
+
+    # Si la fenêtre est agrandie (hauteur augmentée), ajuster la position du joueur
+    new_screen_height = pygame.display.get_surface().get_height()
+    if new_screen_height > initial_screen_height:  # Si l'écran est agrandi
+        delta_y = (new_screen_height - initial_screen_height) // 10  # Décalage proportionnel
+        player.y += delta_y  # Déplacer le joueur vers le bas uniquement quand l'écran est agrandi
+
+        # Mettre à jour la taille de l'écran initial pour les futures comparaisons
+        initial_screen_height = new_screen_height
 
     # Application de la gravité et déplacement des obstacles
     player.apply_gravity()

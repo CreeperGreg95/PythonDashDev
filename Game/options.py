@@ -3,18 +3,31 @@
 class GameOptions:
     def __init__(self):
         # Paramètres de base du jeu
-        self.obstacle_speed = 5  # Vitesse des obstacles
-        self.show_hitboxes = False  # Option pour afficher/désactiver les hitboxes
-        
+        self.obstacle_speed = 5
+        self.show_hitboxes = False
+
         # Paramètres de la fenêtre
-        self.screen_width = 800  # Largeur de la fenêtre
-        self.screen_height = 400  # Hauteur de la fenêtre
-        
+        self.screen_width = 1200
+        self.screen_height = 800
+        self.aspect_ratio = self.screen_width / self.screen_height  # Proportion de l'écran
+
         # Paramètres des FPS
-        self.fps_limit = 60  # Limite des FPS par défaut
-        
+        self.fps_limit = 60
+
         # Paramètres du background
-        self.background_speed_factor = 0.1  # Facteur de vitesse du background par rapport à la vitesse des obstacles
+        self.background_speed_factor = 0.1
+
+    def update_window_size(self, width, height):
+        """Met à jour la taille de la fenêtre tout en respectant les proportions."""
+        new_aspect_ratio = width / height
+        if new_aspect_ratio > self.aspect_ratio:
+            # Si la fenêtre est plus large que nécessaire, ajuster la largeur
+            self.screen_width = int(height * self.aspect_ratio)
+            self.screen_height = height
+        else:
+            # Si la fenêtre est plus haute que nécessaire, ajuster la hauteur
+            self.screen_width = width
+            self.screen_height = int(width / self.aspect_ratio)
 
     # Méthode pour augmenter la difficulté (augmentation de la vitesse des obstacles)
     def increase_difficulty(self):

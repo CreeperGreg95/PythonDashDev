@@ -13,11 +13,11 @@ def handle_event(event, player, options):
     if event.type == pygame.KEYDOWN:
         if event.key == pygame.K_SPACE:
             # Le joueur saute verticalement
-            player.jump(0)
+            player.jump()
             print("la touche espace a été pressée !")
         elif event.key == pygame.K_UP:
             # Le joueur saute verticalement
-            player.jump(0)
+            player.jump()
             print("La touche flèche haute a été pressée !")
         elif event.key == pygame.K_h:
             # Basculer la visibilité des hitboxes
@@ -36,5 +36,5 @@ def handle_event(event, player, options):
 
     elif event.type == pygame.MOUSEBUTTONDOWN:
         if event.button == 1:  # Clic gauche
-            player.jump(0)
+            player.jump()
             print("Le clic gauche de la souris a été pressée !")

@@ -1,37 +1,43 @@
-# obstacles.py Version 3
+# obstacles.py version 4
 
 import pygame
 from hitbox import Hitbox
 
 class Obstacle:
-    def __init__(self, x, speed, ground_height):
+    def __init__(self, screen_width, screen_height, speed, ground_height):
+        # Sauvegarde des dimensions de l'écran
+        self.screen_width = screen_width
+        self.screen_height = screen_height
+        
+        # Charger l'image de l'obstacle et ajuster sa taille
         self.image = pygame.image.load("resources/spike01.png")
-        self.image = pygame.transform.scale(self.image, (45, 45))  # Redimensionne à 45x45 pixels
-        self.x = x
-        self.y = 400 - self.image.get_height() - ground_height  # Décalage du sol
+        self.image = pygame.transform.scale(self.image, (45, 45))  # Taille fixe des obstacles
+        
+        # Position de l'obstacle, au bord droit de l'écran
+        self.x = self.screen_width  # Position initiale à l'extrême droite
+        self.y = self.screen_height - self.image.get_height() - ground_height  # Position au-dessus du sol
+        
+        # Vitesse du déplacement
         self.speed = speed
 
-        # Crée une hitbox triangulaire pour l'obstacle
+        # Création de la hitbox
         self.hitbox = Hitbox(self.x, self.y, self.image.get_width(), self.image.get_height())
 
     def move(self):
+        # Déplacer l'obstacle vers la gauche
         self.x -= self.speed
-        self.hitbox.update(self.x, self.y, self.image.get_width(), self.image.get_height())  # Met à jour la position de la hitbox
-        if self.x < -45:
-            self.x = 800  # Réinitialise la position de l'obstacle à droite de l'écran
-            self.hitbox.update(self.x, self.y, self.image.get_width(), self.image.get_height())  # Réinitialise aussi la hitbox
+        self.hitbox.update(self.x, self.y, self.image.get_width(), self.image.get_height())  # Mise à jour de la hitbox
+
+        # Si l'obstacle sort de l'écran, le remettre au bord droit
+        if self.x < -self.image.get_width():
+            self.x = self.screen_width  # Réinitialiser à l'extrême droite
+            self.hitbox.update(self.x, self.y, self.image.get_width(), self.image.get_height())  # Réinitialisation de la hitbox
 
     def draw(self, screen, show_hitboxes):
-        # Dessine l'image de l'obstacle
         screen.blit(self.image, (self.x, self.y))
-
-        # Si show_hitboxes est activé, dessiner la hitbox triangulaire
         if show_hitboxes:
-            self.hitbox.draw(screen)  # Dessine la hitbox triangulaire
+            self.hitbox.draw(screen)
 
     def get_rect(self):
         """Retourne un rectangle englobant l'obstacle."""
         return self.hitbox.get_rect()
-
-    def get_position(self):
-        return self.x, self.y
