@@ -1,4 +1,5 @@
-# obstacles.py
+# obstacles.py - version clean
+
 import pygame
 import random
 from hitbox import Hitbox
