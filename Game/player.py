@@ -1,6 +1,7 @@
-# player.py version 4
+# player.py version 5
 
 import pygame
+from speed import JUMP_HORIZONTAL_SPEED
 
 class Player:
     def __init__(self, icon, ground_height, screen_height=None):
