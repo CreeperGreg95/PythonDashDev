@@ -8,6 +8,8 @@ from options import GameOptions             # options.py
 from keybinds import handle_event           # keybinds.py
 from grounds import Ground                  # grounds.py
 from backgrounds import Background          # backgrounds.py
+from speeds_data import Speed                     # speed.py
+
 
 # Initialisation de Pygame et des options de jeu
 options = GameOptions()
@@ -16,89 +18,93 @@ screen = pygame.display.set_mode((options.screen_width, options.screen_height))
 pygame.display.set_caption("Python Dash")
 
 # Chargement des ressources et initialisation des objets
-player = Player(load_player_icon(), options.screen_height // 8, options.screen_height)  # Passer screen_height ici
+player = Player(load_player_icon(), options.screen_height // 8, options.screen_height)
 ground = Ground(options.screen_width, options.screen_height, options.screen_height // 8, texture_count=5000)
 background = Background(options.screen_width, options.screen_height, texture_count=5000)
 
-# Liste des obstacles et chronomètre pour leur apparition
+# Listes des obstacles et des boosts
 obstacles = []
-obstacle_spawn_timer = 0  # Chronomètre pour générer les obstacles
-
-# Variable pour contrôler la vitesse du background (modifiable facilement)
-BACKGROUND_SPEED = options.obstacle_speed * options.background_speed_factor  # Le fond se déplace plus lentement
+speeds = []
+obstacle_spawn_timer = 0
+speeds_spawn_timer = 0
+current_speed_factor = 1  # Facteur de vitesse initial
 
 # Boucle de jeu
 running = True
 clock = pygame.time.Clock()
-
-# Sauvegarde de la taille initiale de l'écran pour référence
-initial_screen_height = options.screen_height
 
 while running:
     # Gestion des événements
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-        elif event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_h:  # Touche H
-               player.toggle_inner_hitbox() 
         handle_event(event, player, options)
 
-    # Si la fenêtre est agrandie (hauteur augmentée), ajuster la position du joueur
-    new_screen_height = pygame.display.get_surface().get_height()
-    if new_screen_height > initial_screen_height:  # Si l'écran est agrandi
-        delta_y = (new_screen_height - initial_screen_height) // 10  # Décalage proportionnel
-        player.y += delta_y  # Déplacer le joueur vers le bas uniquement quand l'écran est agrandi
-
-        # Mettre à jour la taille de l'écran initial pour les futures comparaisons
-        initial_screen_height = new_screen_height
-
-    # Application de la gravité et déplacement des obstacles
+    # Application de la gravité
     player.apply_gravity()
 
-    # Gérer les obstacles (ajout et suppression)
+    # Ajustement des vitesses pour les obstacles et le fond
+    adjusted_obstacle_speed = options.obstacle_speed * current_speed_factor
+    adjusted_background_speed = BACKGROUND_SPEED * current_speed_factor
+
+    # Gérer les obstacles
     obstacle_spawn_timer += 1
-    if obstacle_spawn_timer > 100:  # Générer un obstacle toutes les 100 frames environ
-        obstacles.append(Obstacle(options.screen_width, options.screen_height, options.obstacle_speed, options.screen_height // 8))
+    if obstacle_spawn_timer > 100:
+        obstacles.append(Obstacle(options.screen_width, options.screen_height, adjusted_obstacle_speed, options.screen_height // 8))
         obstacle_spawn_timer = 0
 
-    for obstacle in list(obstacles):  # Utilisation de list() pour éviter les conflits lors de la suppression
+    for obstacle in list(obstacles):
         obstacle.move()
 
-        # Supprimer les obstacles qui sont hors écran
+        # Supprimer les obstacles hors écran
         if obstacle.is_off_screen():
             obstacles.remove(obstacle)
 
         # Vérifier les collisions avec le joueur
         if player.get_rect().colliderect(obstacle.get_rect()):
             print("Game Over!")
+            running = False
 
-    # Nettoyer l'écran à chaque frame pour éviter les artefacts
-    screen.fill((255, 255, 255))  # Fond blanc (ou une autre couleur de fond)
+    # Gérer les boosts de vitesse
+    speeds_spawn_timer += 1
+    if speeds_spawn_timer > 100:
+        speeds.append(Speed(options.screen_width, options.screen_height, adjusted_obstacle_speed, options.screen_height // 8))
+        speeds_spawn_timer = 0
 
-    # Déplacer et dessiner le fond à la vitesse contrôlée par BACKGROUND_SPEED
-    background.move(BACKGROUND_SPEED)  # Utilisation de la vitesse modifiable
-    background.draw(screen)  # Dessiner le fond
+    for speed in list(speeds):
+        speed.move()
 
-    # Dessin du joueur
+        # Supprimer les speeds hors écran
+        if speed.is_off_screen():
+            speeds.remove(speed)
+
+        # Vérifier les collisions avec le joueur
+        if player.get_rect().colliderect(speed.get_rect()):
+            current_speed_factor = speed.get_speed_factor()  # Appliquer le facteur de vitesse
+            speeds.remove(speed)  # Supprimer l'objet speed après utilisation
+
+    # Nettoyer l'écran
+    screen.fill((255, 255, 255))
+
+    # Déplacer et dessiner le fond avec la vitesse ajustée
+    background.move(adjusted_background_speed)
+    background.draw(screen)
+
+    # Dessiner le joueur
     player.draw(screen)
 
-    # Dessiner les obstacles
+    # Déplacer et dessiner le sol
+    ground.move(adjusted_obstacle_speed)
+    ground.draw(screen)
+
+    # Dessiner les obstacles et les boosts
     for obstacle in obstacles:
         obstacle.draw(screen, options.show_hitboxes)
-
-    # Déplacer et dessiner le sol
-    ground.move(options.obstacle_speed)  # Déplace le sol à la vitesse normale
-    ground.draw(screen)  # Dessiner le sol
-
-    # Affichage des hitboxes si activées
-    if options.show_hitboxes:
-        pygame.draw.rect(screen, (0, 0, 139), player.get_rect(), 2)  # Hitbox du joueur en bleu foncé
+    for speed in speeds:
+        speed.draw(screen, options.show_hitboxes)
 
     # Mise à jour de l'écran et limitation des FPS
     pygame.display.flip()
-    clock.tick(options.fps_limit)  # Utilisation de la limite des FPS définie dans les options
+    clock.tick(options.fps_limit)
 
-# Quitter Pygame
 pygame.quit()
- 

@@ -1,7 +1,7 @@
 # player.py version 6
 
 import pygame
-from speed import JUMP_HORIZONTAL_SPEED
+from speeds_data import JUMP_HORIZONTAL_SPEED
 
 class Player:
     def __init__(self, icon, ground_height, screen_height=None):
@@ -22,6 +22,7 @@ class Player:
         self.gravity = 0.8
         self.is_jumping = False
         self.rotation_angle = 0
+        self.jump_speed = JUMP_HORIZONTAL_SPEED
 
         # Taille de la hitbox carrée jaune
         self.inner_hitbox_size = 10  # Par défaut, 10x10

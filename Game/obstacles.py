@@ -10,16 +10,8 @@ class Obstacle:
         self.screen_width = screen_width
         self.screen_height = screen_height
         
-        # Charger une image d'obstacle aléatoire parmi 5 images
-        obstacle_images = [
-            pygame.image.load("resources/editor/obstacles/spike01.png"),
-            pygame.image.load("resources/speeds/boost0.5.png"),
-            pygame.image.load("resources/speeds/boost4.png"),
-            pygame.image.load("resources/speeds/speed1.png"),
-            pygame.image.load("resources/speeds/speed2.png"),
-            pygame.image.load("resources/speeds/speed3.png")
-        ]
-        self.image = random.choice(obstacle_images)  # Choix aléatoire de l'image
+        # Chargement de l'obstacle et de sa taille
+        self.image = pygame.image.load("resources/editor/obstacles/spike01.png") # Choix aléatoire de l'image
         self.image = pygame.transform.scale(self.image, (45, 45))  # Taille fixe des obstacles
         
         # Position de l'obstacle, au bord droit de l'écran
