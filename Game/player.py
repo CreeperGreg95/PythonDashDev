@@ -1,4 +1,4 @@
-# player.py version 5
+# player.py version 6
 
 import pygame
 from speed import JUMP_HORIZONTAL_SPEED
@@ -22,6 +22,14 @@ class Player:
         self.gravity = 0.8
         self.is_jumping = False
         self.rotation_angle = 0
+
+        # Taille de la hitbox carrée jaune
+        self.inner_hitbox_size = 10  # Par défaut, 10x10
+        self.show_inner_hitbox = False  # Contrôle de la visibilité de la hitbox
+
+    def toggle_inner_hitbox(self):
+        """Basculer l'état de visibilité de la hitbox jaune."""
+        self.show_inner_hitbox = not self.show_inner_hitbox
 
     def apply_gravity(self):
         if self.is_jumping:
@@ -48,6 +56,16 @@ class Player:
         # La hitbox reste 50x50, l'icône est centrée dans cette hitbox
         icon_rect = rotated_icon.get_rect(center=(self.x + self.size // 2, self.y + self.size // 2))
         screen.blit(rotated_icon, icon_rect.topleft)
+
+        # Dessiner une hitbox jaune foncé au centre du joueur si activée
+        if self.show_inner_hitbox:
+            inner_rect = pygame.Rect(
+                self.x + (self.size - self.inner_hitbox_size) // 2,  # Centrer horizontalement
+                self.y + (self.size - self.inner_hitbox_size) // 2,  # Centrer verticalement
+                self.inner_hitbox_size,
+                self.inner_hitbox_size,
+            )
+            pygame.draw.rect(screen, (204, 204, 0), inner_rect, 2)  # Couleur jaune foncé, contour seulement
 
     def get_rect(self):
         # Retourner la hitbox fixe (50x50)

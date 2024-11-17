@@ -1,13 +1,13 @@
-# main.py version 7
+# main.py version 8
 
-import pygame
-from player import Player
-from icons import load_player_icon
-from obstacles import Obstacle
-from options import GameOptions
-from keybinds import handle_event
-from grounds import Ground  # Importation de la classe Ground
-from backgrounds import Background  # Importation de la classe Background
+import pygame                               # Pygame
+from player import Player                   # player.py
+from icons import load_player_icon          # icons.py
+from obstacles import Obstacle              # obstacles.py
+from options import GameOptions             # options.py
+from keybinds import handle_event           # keybinds.py
+from grounds import Ground                  # grounds.py
+from backgrounds import Background          # backgrounds.py
 
 # Initialisation de Pygame et des options de jeu
 options = GameOptions()
@@ -36,6 +36,9 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+        elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_h:  # Touche H
+               player.toggle_inner_hitbox() 
         handle_event(event, player, options)
 
     # Si la fenêtre est agrandie (hauteur augmentée), ajuster la position du joueur
@@ -72,7 +75,7 @@ while running:
 
     # Affichage des hitboxes si activées
     if options.show_hitboxes:
-        pygame.draw.rect(screen, (255, 0, 0), player.get_rect(), 2)  # Dessine la hitbox du joueur en rouge
+        pygame.draw.rect(screen, (0, 0, 139), player.get_rect(), 2)  # Hitbox du joueur en bleu foncé
 
     # Mise à jour de l'écran et limitation des FPS
     pygame.display.flip()

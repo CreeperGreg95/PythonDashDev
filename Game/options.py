@@ -1,4 +1,4 @@
-# options.py version 2
+# options.py version 3
 
 class GameOptions:
     def __init__(self):
@@ -7,7 +7,7 @@ class GameOptions:
         self.show_hitboxes = False
 
         # Paramètres de la fenêtre
-        self.screen_width = 1200
+        self.screen_width = 800
         self.screen_height = 800
         self.aspect_ratio = self.screen_width / self.screen_height  # Proportion de l'écran
 
