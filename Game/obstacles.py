@@ -1,6 +1,6 @@
-# obstacles.py version 4
-
+# obstacles.py
 import pygame
+import random
 from hitbox import Hitbox
 
 class Obstacle:
@@ -9,8 +9,16 @@ class Obstacle:
         self.screen_width = screen_width
         self.screen_height = screen_height
         
-        # Charger l'image de l'obstacle et ajuster sa taille
-        self.image = pygame.image.load("resources/editor/obstacles/spike01.png")
+        # Charger une image d'obstacle aléatoire parmi 5 images
+        obstacle_images = [
+            pygame.image.load("resources/editor/obstacles/spike01.png"),
+            pygame.image.load("resources/speeds/boost0.5.png"),
+            pygame.image.load("resources/speeds/boost4.png"),
+            pygame.image.load("resources/speeds/speed1.png"),
+            pygame.image.load("resources/speeds/speed2.png"),
+            pygame.image.load("resources/speeds/speed3.png")
+        ]
+        self.image = random.choice(obstacle_images)  # Choix aléatoire de l'image
         self.image = pygame.transform.scale(self.image, (45, 45))  # Taille fixe des obstacles
         
         # Position de l'obstacle, au bord droit de l'écran
@@ -24,16 +32,12 @@ class Obstacle:
         self.hitbox = Hitbox(self.x, self.y, self.image.get_width(), self.image.get_height())
 
     def move(self):
-        # Déplacer l'obstacle vers la gauche
+        """Déplace l'obstacle vers la gauche."""
         self.x -= self.speed
         self.hitbox.update(self.x, self.y, self.image.get_width(), self.image.get_height())  # Mise à jour de la hitbox
 
-        # Si l'obstacle sort de l'écran, le remettre au bord droit
-        if self.x < -self.image.get_width():
-            self.x = self.screen_width  # Réinitialiser à l'extrême droite
-            self.hitbox.update(self.x, self.y, self.image.get_width(), self.image.get_height())  # Réinitialisation de la hitbox
-
     def draw(self, screen, show_hitboxes):
+        """Dessine l'obstacle sur l'écran."""
         screen.blit(self.image, (self.x, self.y))
         if show_hitboxes:
             self.hitbox.draw(screen)
@@ -41,3 +45,8 @@ class Obstacle:
     def get_rect(self):
         """Retourne un rectangle englobant l'obstacle."""
         return self.hitbox.get_rect()
+
+    def is_off_screen(self):
+        """Vérifie si l'obstacle est hors de l'écran."""
+        return self.x < -self.image.get_width()  # L'obstacle est hors de l'écran si sa position x est inférieure à -sa largeur
+

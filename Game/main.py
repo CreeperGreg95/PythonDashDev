@@ -1,4 +1,4 @@
-# main.py version 8
+# main.py version 9
 
 import pygame                               # Pygame
 from player import Player                   # player.py
@@ -17,9 +17,12 @@ pygame.display.set_caption("Python Dash")
 
 # Chargement des ressources et initialisation des objets
 player = Player(load_player_icon(), options.screen_height // 8, options.screen_height)  # Passer screen_height ici
-obstacle = Obstacle(options.screen_width, options.screen_height, options.obstacle_speed, options.screen_height // 8)
 ground = Ground(options.screen_width, options.screen_height, options.screen_height // 8, texture_count=5000)
 background = Background(options.screen_width, options.screen_height, texture_count=5000)
+
+# Liste des obstacles et chronomètre pour leur apparition
+obstacles = []
+obstacle_spawn_timer = 0  # Chronomètre pour générer les obstacles
 
 # Variable pour contrôler la vitesse du background (modifiable facilement)
 BACKGROUND_SPEED = options.obstacle_speed * options.background_speed_factor  # Le fond se déplace plus lentement
@@ -52,11 +55,23 @@ while running:
 
     # Application de la gravité et déplacement des obstacles
     player.apply_gravity()
-    obstacle.move()
 
-    # Détection de collision
-    if player.get_rect().colliderect(obstacle.get_rect()):
-        print("Game Over!")
+    # Gérer les obstacles (ajout et suppression)
+    obstacle_spawn_timer += 1
+    if obstacle_spawn_timer > 100:  # Générer un obstacle toutes les 100 frames environ
+        obstacles.append(Obstacle(options.screen_width, options.screen_height, options.obstacle_speed, options.screen_height // 8))
+        obstacle_spawn_timer = 0
+
+    for obstacle in list(obstacles):  # Utilisation de list() pour éviter les conflits lors de la suppression
+        obstacle.move()
+
+        # Supprimer les obstacles qui sont hors écran
+        if obstacle.is_off_screen():
+            obstacles.remove(obstacle)
+
+        # Vérifier les collisions avec le joueur
+        if player.get_rect().colliderect(obstacle.get_rect()):
+            print("Game Over!")
 
     # Nettoyer l'écran à chaque frame pour éviter les artefacts
     screen.fill((255, 255, 255))  # Fond blanc (ou une autre couleur de fond)
@@ -65,9 +80,12 @@ while running:
     background.move(BACKGROUND_SPEED)  # Utilisation de la vitesse modifiable
     background.draw(screen)  # Dessiner le fond
 
-    # Dessin du joueur et de l'obstacle
-    player.draw(screen)  # Dessin du joueur
-    obstacle.draw(screen, options.show_hitboxes)  # Dessin de l'obstacle et de sa hitbox
+    # Dessin du joueur
+    player.draw(screen)
+
+    # Dessiner les obstacles
+    for obstacle in obstacles:
+        obstacle.draw(screen, options.show_hitboxes)
 
     # Déplacer et dessiner le sol
     ground.move(options.obstacle_speed)  # Déplace le sol à la vitesse normale
@@ -83,3 +101,4 @@ while running:
 
 # Quitter Pygame
 pygame.quit()
+ 
