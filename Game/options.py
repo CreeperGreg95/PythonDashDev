@@ -8,7 +8,7 @@ class GameOptions:
 
         # Paramètres de la fenêtre
         self.screen_width = 800
-        self.screen_height = 800
+        self.screen_height = 400
         self.aspect_ratio = self.screen_width / self.screen_height  # Proportion de l'écran
 
         # Paramètres des FPS
