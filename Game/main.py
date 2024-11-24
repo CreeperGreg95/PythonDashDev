@@ -1,5 +1,3 @@
-# main.py version 9
-
 import pygame                               # Pygame
 from player import Player                   # player.py
 from icons import load_player_icon          # icons.py
@@ -8,8 +6,7 @@ from options import GameOptions             # options.py
 from keybinds import handle_event           # keybinds.py
 from grounds import Ground                  # grounds.py
 from backgrounds import Background          # backgrounds.py
-from speeds_data import Speed                     # speed.py
-
+from speeds_data import Speed               # speed.py
 
 # Initialisation de Pygame et des options de jeu
 options = GameOptions()
@@ -26,26 +23,40 @@ background = Background(options.screen_width, options.screen_height, texture_cou
 obstacles = []
 speeds = []
 obstacle_spawn_timer = 0
-speeds_spawn_timer = 0
 current_speed_factor = 1  # Facteur de vitesse initial
 
 # Boucle de jeu
 running = True
 clock = pygame.time.Clock()
 
+h_pressed = False
+
 while running:
-    # Gestion des événements
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-        handle_event(event, player, options)
+        elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_h and not h_pressed:
+                h_pressed = True
+                options.toggle_hitboxes()
+                print(f"Hitboxes {'activées' if options.show_hitboxes else 'désactivées'}.")
+            elif event.key in (pygame.K_SPACE, pygame.K_UP): #Barre d'aspace et Flèche directionnelle du haut
+                player.jump()
+
+        elif event.type == pygame.MOUSEBUTTONDOWN:
+            if event.button == 1:  # Clic gauche
+                player.jump()
+
+        elif event.type == pygame.KEYUP:
+            if event.key == pygame.K_h:
+                h_pressed = False
 
     # Application de la gravité
     player.apply_gravity()
 
     # Ajustement des vitesses pour les obstacles et le fond
     adjusted_obstacle_speed = options.obstacle_speed * current_speed_factor
-    adjusted_background_speed = BACKGROUND_SPEED * current_speed_factor
+    # adjusted_background_speed = BACKGROUND_SPEED * current_speed_factor
 
     # Gérer les obstacles
     obstacle_spawn_timer += 1
@@ -65,34 +76,15 @@ while running:
             print("Game Over!")
             running = False
 
-    # Gérer les boosts de vitesse
-    speeds_spawn_timer += 1
-    if speeds_spawn_timer > 100:
-        speeds.append(Speed(options.screen_width, options.screen_height, adjusted_obstacle_speed, options.screen_height // 8))
-        speeds_spawn_timer = 0
-
-    for speed in list(speeds):
-        speed.move()
-
-        # Supprimer les speeds hors écran
-        if speed.is_off_screen():
-            speeds.remove(speed)
-
-        # Vérifier les collisions avec le joueur
-        if player.get_rect().colliderect(speed.get_rect()):
-            current_speed_factor = speed.get_speed_factor()  # Appliquer le facteur de vitesse
-            speeds.remove(speed)  # Supprimer l'objet speed après utilisation
-
     # Nettoyer l'écran
     screen.fill((255, 255, 255))
 
     # Déplacer et dessiner le fond avec la vitesse ajustée
-    background.move(adjusted_background_speed)
+    # background.move(adjusted_background_speed)
     background.draw(screen)
 
     # Dessiner le joueur
-    player.draw(screen)
-
+    player.draw(screen, options.show_hitboxes)
     # Déplacer et dessiner le sol
     ground.move(adjusted_obstacle_speed)
     ground.draw(screen)

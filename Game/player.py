@@ -1,73 +1,54 @@
-# player.py version 6
-
 import pygame
-from speeds_data import JUMP_HORIZONTAL_SPEED
+from hitbox import Hitbox
 
 class Player:
-    def __init__(self, icon, ground_height, screen_height=None):
-        self.icon = icon
-        self.size = 50  # Taille fixe de la hitbox (50x50)
+    def __init__(self, icon, ground_height, screen_height):
+        self.icon = pygame.transform.scale(icon, (50, 50))
+        self.size = 50
         self.x = 100
         self.ground_height = ground_height
-
-        # Ajuste la taille de l'icône pour qu'elle soit toujours 50x50
-        self.icon = pygame.transform.scale(self.icon, (self.size, self.size))  # Redimensionner l'icône à 50x50
-
-        # Calcul de la position y du joueur
         self.screen_height = screen_height
-        self.y = self.screen_height - self.ground_height - self.icon.get_height()
+        self.y = screen_height - ground_height - self.size
 
         self.velocity_y = 0
-        self.jump_strength = 15
+        self.jump_strength = 13.87
         self.gravity = 0.8
         self.is_jumping = False
         self.rotation_angle = 0
-        self.jump_speed = JUMP_HORIZONTAL_SPEED
 
-        # Taille de la hitbox carrée jaune
-        self.inner_hitbox_size = 10  # Par défaut, 10x10
-        self.show_inner_hitbox = False  # Contrôle de la visibilité de la hitbox
-
-    def toggle_inner_hitbox(self):
-        """Basculer l'état de visibilité de la hitbox jaune."""
-        self.show_inner_hitbox = not self.show_inner_hitbox
+        # Hitboxes
+        self.outer_hitbox = Hitbox(self.x, self.y, self.size, self.size, color=(0, 0, 255), shape="rectangle")
+        self.inner_hitbox = Hitbox(self.x + 10, self.y + 10, self.size - 20, self.size - 20, color=(255, 255, 0), shape="rectangle")
 
     def apply_gravity(self):
         if self.is_jumping:
             self.y += self.velocity_y
             self.velocity_y += self.gravity
             self.rotation_angle -= 5
-            if self.y >= self.screen_height - self.ground_height - self.icon.get_height():
-                self.y = self.screen_height - self.ground_height - self.icon.get_height()
+            if self.y >= self.screen_height - self.ground_height - self.size:
+                self.y = self.screen_height - self.ground_height - self.size
                 self.is_jumping = False
                 self.rotation_angle = 0
+
+        # Mise à jour des hitboxes
+        self.outer_hitbox.update(self.x, self.y)
+        self.inner_hitbox.update(self.x + 10, self.y + 10)
 
     def jump(self):
         if not self.is_jumping:
             self.is_jumping = True
             self.velocity_y = -self.jump_strength
 
-    def adjust_size(self, new_screen_height):
-        """Ajuste la taille de l'icône à 50x50, mais garde la hitbox fixe."""
-        self.icon = pygame.transform.scale(self.icon, (self.size, self.size))  # Taille fixe à 50x50
-        self.y = new_screen_height - self.ground_height - self.icon.get_height()
-
-    def draw(self, screen):
+    def draw(self, screen, show_hitboxes):
+        # Dessiner l'icône
         rotated_icon = pygame.transform.rotate(self.icon, self.rotation_angle)
-        # La hitbox reste 50x50, l'icône est centrée dans cette hitbox
         icon_rect = rotated_icon.get_rect(center=(self.x + self.size // 2, self.y + self.size // 2))
         screen.blit(rotated_icon, icon_rect.topleft)
 
-        # Dessiner une hitbox jaune foncé au centre du joueur si activée
-        if self.show_inner_hitbox:
-            inner_rect = pygame.Rect(
-                self.x + (self.size - self.inner_hitbox_size) // 2,  # Centrer horizontalement
-                self.y + (self.size - self.inner_hitbox_size) // 2,  # Centrer verticalement
-                self.inner_hitbox_size,
-                self.inner_hitbox_size,
-            )
-            pygame.draw.rect(screen, (204, 204, 0), inner_rect, 2)  # Couleur jaune foncé, contour seulement
+        # Dessiner les hitboxes si activées
+        if show_hitboxes:
+            self.outer_hitbox.draw(screen)
+            self.inner_hitbox.draw(screen)
 
     def get_rect(self):
-        # Retourner la hitbox fixe (50x50)
-        return pygame.Rect(self.x, self.y, self.size, self.size)
+        return self.outer_hitbox.get_rect()
