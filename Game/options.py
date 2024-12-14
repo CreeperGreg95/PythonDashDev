@@ -7,7 +7,7 @@ class GameOptions:
         self.screen_height = 650
         self.aspect_ratio = self.screen_width / self.screen_height
 
-        self.fps_limit = 62
+        self.fps_limit = 60
         self.background_speed_factor = 0.1
 
     def update_window_size(self, width, height):
