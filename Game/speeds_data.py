@@ -4,6 +4,10 @@ import pygame
 import random
 
 """
+Définitions
+"""
+
+"""
 Vitesse du joueur.
 """
 JUMP_HORIZONTAL_SPEED = 5
@@ -16,9 +20,6 @@ Vitesse de la caméra
 """
 Vitesse du gameplay
 """
-# speed.py - gestion de la vitesse.
-
-# speed.py - gestion de la vitesse.
 
 import pygame
 import random

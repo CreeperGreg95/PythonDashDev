@@ -3,11 +3,11 @@ class GameOptions:
         self.obstacle_speed = 5
         self.show_hitboxes = False
 
-        self.screen_width = 800
-        self.screen_height = 400
+        self.screen_width = 1200
+        self.screen_height = 650
         self.aspect_ratio = self.screen_width / self.screen_height
 
-        self.fps_limit = 60
+        self.fps_limit = 62
         self.background_speed_factor = 0.1
 
     def update_window_size(self, width, height):

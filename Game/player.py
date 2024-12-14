@@ -1,5 +1,6 @@
 import pygame
 from hitbox import Hitbox
+from death import DeathManager
 
 class Player:
     def __init__(self, icon, ground_height, screen_height):
@@ -16,7 +17,6 @@ class Player:
         self.is_jumping = False
         self.rotation_angle = 0
 
-        # Hitboxes
         self.outer_hitbox = Hitbox(self.x, self.y, self.size, self.size, color=(0, 0, 255), shape="rectangle")
         self.inner_hitbox = Hitbox(self.x + 10, self.y + 10, self.size - 20, self.size - 20, color=(255, 255, 0), shape="rectangle")
 
@@ -30,7 +30,6 @@ class Player:
                 self.is_jumping = False
                 self.rotation_angle = 0
 
-        # Mise à jour des hitboxes
         self.outer_hitbox.update(self.x, self.y)
         self.inner_hitbox.update(self.x + 10, self.y + 10)
 
@@ -40,15 +39,16 @@ class Player:
             self.velocity_y = -self.jump_strength
 
     def draw(self, screen, show_hitboxes):
-        # Dessiner l'icône
         rotated_icon = pygame.transform.rotate(self.icon, self.rotation_angle)
         icon_rect = rotated_icon.get_rect(center=(self.x + self.size // 2, self.y + self.size // 2))
         screen.blit(rotated_icon, icon_rect.topleft)
 
-        # Dessiner les hitboxes si activées
         if show_hitboxes:
             self.outer_hitbox.draw(screen)
             self.inner_hitbox.draw(screen)
 
     def get_rect(self):
         return self.outer_hitbox.get_rect()
+
+    def check_collision(self, obstacle_hitbox):
+        return DeathManager.check_collision(self.outer_hitbox, [obstacle_hitbox])

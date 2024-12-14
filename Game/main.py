@@ -7,6 +7,7 @@ from keybinds import handle_event           # keybinds.py
 from grounds import Ground                  # grounds.py
 from backgrounds import Background          # backgrounds.py
 from speeds_data import Speed               # speed.py
+from death import DeathManager              # death.py
 
 # Initialisation de Pygame et des options de jeu
 options = GameOptions()
@@ -56,7 +57,6 @@ while running:
 
     # Ajustement des vitesses pour les obstacles et le fond
     adjusted_obstacle_speed = options.obstacle_speed * current_speed_factor
-    # adjusted_background_speed = BACKGROUND_SPEED * current_speed_factor
 
     # Gérer les obstacles
     obstacle_spawn_timer += 1
@@ -71,16 +71,15 @@ while running:
         if obstacle.is_off_screen():
             obstacles.remove(obstacle)
 
-        # Vérifier les collisions avec le joueur
-        if player.get_rect().colliderect(obstacle.get_rect()):
-            print("Game Over!")
-            running = False
+    # Vérifier les collisions entre la hitbox du joueur et les obstacles
+    if DeathManager.check_collision(player.outer_hitbox, [obstacle.hitbox for obstacle in obstacles]):
+        DeathManager.handle_death()
+        running = False
 
     # Nettoyer l'écran
     screen.fill((255, 255, 255))
 
     # Déplacer et dessiner le fond avec la vitesse ajustée
-    # background.move(adjusted_background_speed)
     background.draw(screen)
 
     # Dessiner le joueur
