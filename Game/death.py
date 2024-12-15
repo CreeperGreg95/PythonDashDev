@@ -90,5 +90,3 @@ class DeathManager:
         Logique à exécuter lorsqu'une collision fatale est détectée.
         """
         print("Game Over!")
-
-#testing again the Discord Webhook system.
