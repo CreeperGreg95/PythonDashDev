@@ -17,6 +17,11 @@ class Player:
         self.is_jumping = False
         self.rotation_angle = 0
 
+        # Ajout de la gestion de la vitesse
+        self.default_speed = 1.0
+        self.speed = self.default_speed  # Vitesse actuelle
+
+        # Hitboxes
         self.outer_hitbox = Hitbox(self.x, self.y, self.size, self.size, color=(0, 0, 255), shape="rectangle")
         self.inner_hitbox = Hitbox(self.x + 10, self.y + 10, self.size - 20, self.size - 20, color=(255, 255, 0), shape="rectangle")
 
@@ -52,3 +57,7 @@ class Player:
 
     def check_collision(self, obstacle_hitbox):
         return DeathManager.check_collision(self.outer_hitbox, [obstacle_hitbox])
+
+    def reset_speed(self):
+        """Réinitialise la vitesse à sa valeur par défaut."""
+        self.speed = self.default_speed

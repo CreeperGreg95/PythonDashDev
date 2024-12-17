@@ -1,29 +1,6 @@
-# speed.py - gestion de la vitesse.
-
-import pygame
-import random
-
-"""
-Définitions
-"""
-
-"""
-Vitesse du joueur.
-"""
-JUMP_HORIZONTAL_SPEED = 5
-
-"""
-Vitesse de la caméra
-"""
-# A venir
-
-"""
-Vitesse du gameplay
-"""
-
-import pygame
-import random
 from hitbox import Hitbox
+import pygame
+import random
 
 class Speed:
     def __init__(self, screen_width, screen_height, speed, ground_height):
@@ -42,23 +19,23 @@ class Speed:
         
         # Choix aléatoire de l'image
         self.image_path = random.choice(speeds_images)
-        self.image = pygame.image.load(self.image_path)  # Charger l'image
-        self.image = pygame.transform.scale(self.image, (45, 45))  # Taille fixe des speeds
+        self.image = pygame.image.load(self.image_path)
+        self.image = pygame.transform.scale(self.image, (45, int(45 * 1.25)))  # Taille augmentée de 1.25
 
-        # Position du speed, au bord droit de l'écran
+        # Position du speed
         self.x = self.screen_width
         self.y = self.screen_height - self.image.get_height() - ground_height
 
         # Vitesse du déplacement
         self.speed = speed
 
-        # Création de la hitbox
-        self.hitbox = Hitbox(self.x, self.y, self.image.get_width(), self.image.get_height())
+        # Création de la hitbox (verte)
+        self.hitbox = Hitbox(self.x, self.y, self.image.get_width(), self.image.get_height(), color=(0, 255, 0))
 
     def move(self):
         """Déplace le speed vers la gauche."""
         self.x -= self.speed
-        self.hitbox.update(self.x, self.y, self.image.get_width(), self.image.get_height())
+        self.hitbox.update(self.x, self.y)
 
     def draw(self, screen, show_hitboxes):
         """Dessine le speed sur l'écran."""
@@ -70,20 +47,15 @@ class Speed:
         """Vérifie si le speed est hors de l'écran."""
         return self.x < -self.image.get_width()
 
-    def get_rect(self):
-        """Retourne le rectangle englobant pour la détection de collision."""
-        return self.hitbox.get_rect()
-
     def apply_effect(self, player):
-        """Applique l'effet du speed au joueur."""
+        """Applique l'effet du speed au joueur et retourne la nouvelle vitesse."""
         if "boost0.5" in self.image_path:
-            player.speed *= 0.5
+            return player.speed * 0.975
         elif "boost4" in self.image_path:
-            player.speed *= 4
+            return player.speed * 2
         elif "speed1" in self.image_path:
-            player.speed *= 1
+            return player.speed
         elif "speed2" in self.image_path:
-            player.speed *= 2
+            return player.speed * 1.231
         elif "speed3" in self.image_path:
-            player.speed *= 3
-        return 1        #facteur paf défaut 
+            return player.speed * 1.60786

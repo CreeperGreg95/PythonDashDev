@@ -41,3 +41,7 @@ class Hitbox:
     def get_rect(self):
         """Retourne un rectangle englobant la hitbox."""
         return pygame.Rect(self.x, self.y, self.width, self.height)
+
+    def intersects(self, other_hitbox):
+        """Vérifie si cette hitbox intersecte une autre."""
+        return self.get_rect().colliderect(other_hitbox.get_rect())
