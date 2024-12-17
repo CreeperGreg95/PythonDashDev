@@ -1,13 +1,14 @@
-File_Ver : 9 [14/12/2024 - 23:18]
-Build : 0.0.5.0
+File_Ver : 10 [17/12/2024 - 20:54]
+Build : 0.0.6.2
 Hitbox File : 3
 Keybinds : 2
 Options : 3
-Speed : 2
-Player : 6
-Main : 10
+Speed : 4
+Player : 7
+Main : 12
 Icons : 2
 Backgrounds : 4
 Obstacles : 5
 Grounds : 4
 Death : 1
+SpeedEffects : *coming soon*
