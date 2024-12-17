@@ -2,7 +2,9 @@
     "git.autofetch": "all",
     "git.autofetchPeriod": 1,
     "python.analysis.extraPaths": [
-        "./Game"
+        "./Game",
+        "./Resources",
+        ".vscode"
     ],
     "git.enableSmartCommit": true
 }
