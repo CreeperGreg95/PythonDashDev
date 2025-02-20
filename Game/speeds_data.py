@@ -1,9 +1,10 @@
 from hitbox import Hitbox
 import pygame
 import random
+from SpeedEffects import SpeedEffect  # Importation de la classe SpeedEffect
 
 class Speed:
-    def __init__(self, screen_width, screen_height, speed, ground_height):
+    def __init__(self, screen_width, screen_height, ground_height, spike_speed):
         # Sauvegarde des dimensions de l'écran
         self.screen_width = screen_width
         self.screen_height = screen_height
@@ -20,17 +21,19 @@ class Speed:
         # Choix aléatoire de l'image
         self.image_path = random.choice(speeds_images)
         self.image = pygame.image.load(self.image_path)
-        self.image = pygame.transform.scale(self.image, (45, int(45 * 1.25)))  # Taille augmentée de 1.25
+        self.image = pygame.transform.scale(self.image, (45, int(45 * 1.25)))  # Augmenter seulement la hauteur
 
         # Position du speed
         self.x = self.screen_width
         self.y = self.screen_height - self.image.get_height() - ground_height
 
         # Vitesse du déplacement
-        self.speed = speed
+        self.speed = spike_speed  # Vitesse fixe et égale à celle des spikes
 
         # Création de la hitbox (verte)
         self.hitbox = Hitbox(self.x, self.y, self.image.get_width(), self.image.get_height(), color=(0, 255, 0))
+
+        self.speed_effect = SpeedEffect()  # Instanciation de la classe SpeedEffect
 
     def move(self):
         """Déplace le speed vers la gauche."""
@@ -48,14 +51,7 @@ class Speed:
         return self.x < -self.image.get_width()
 
     def apply_effect(self, player):
-        """Applique l'effet du speed au joueur et retourne la nouvelle vitesse."""
-        if "boost0.5" in self.image_path:
-            return player.speed * 0.975
-        elif "boost4" in self.image_path:
-            return player.speed * 2
-        elif "speed1" in self.image_path:
-            return player.speed
-        elif "speed2" in self.image_path:
-            return player.speed * 1.231
-        elif "speed3" in self.image_path:
-            return player.speed * 1.60786
+        """Applique l'effet du speed au joueur."""
+        speed_type = self.image_path.split('/')[-1].split('.')[0]  # Extraire le type de speed de l'image
+        print(f"Le speed {speed_type} a apparu.")
+        return self.speed_effect.apply_speed_effect(player, speed_type)  # Appel de la méthode dans SpeedEffect
