@@ -33,7 +33,6 @@ class Player:
             if self.y >= self.screen_height - self.ground_height - self.size:
                 self.y = self.screen_height - self.ground_height - self.size
                 self.is_jumping = False
-                self.rotation_angle = 0
 
         self.outer_hitbox.update(self.x, self.y)
         self.inner_hitbox.update(self.x + 10, self.y + 10)
