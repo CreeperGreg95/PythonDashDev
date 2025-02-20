@@ -6,5 +6,6 @@
         "./Resources",
         ".vscode"
     ],
-    "git.enableSmartCommit": true
+    "git.enableSmartCommit": true,
+    "git.fetchOnPull": true
 }
