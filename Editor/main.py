@@ -6,6 +6,12 @@ import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../Game')))
 from options import GameOptions
 
+def apply_blue_filter(surface):
+    """Applique un filtre bleu semi-transparent sur une surface."""
+    blue_overlay = pygame.Surface(surface.get_size(), pygame.SRCALPHA)
+    blue_overlay.fill((40, 125, 255, 128))  # Bleu avec 50% de transparence
+    surface.blit(blue_overlay, (0, 0))
+
 def main():
     # Initialisation de Pygame
     pygame.init()
@@ -20,13 +26,16 @@ def main():
     # Charger le fichier de fond
     bg_image_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '../Resources/backgrounds/bg01.png'))
     bg_image = pygame.image.load(bg_image_path).convert()
+
+    # Appliquer un filtre bleu sur l'image de fond
+    apply_blue_filter(bg_image)
+
     bg_width = bg_image.get_width()
     bg_height = bg_image.get_height()
 
     # Couleurs
     DARK_GRAY = (50, 50, 50)
-    BLUE_OVERLAY = (0, 0, 255, 50)  # Surcouche bleue avec transparence
-    TRANSPARENCY = 128  # Niveau de transparence pour le panneau (0-255)
+    TRANSPARENCY = 150  # Niveau de transparence pour le panneau (0-255)
 
     # Création du panneau
     panel_height = options.screen_height // 4
@@ -47,11 +56,6 @@ def main():
         bg_area_height = options.screen_height - panel_height
         for i in range((options.screen_width // bg_width) + 2):
             screen.blit(bg_image, (i * bg_width, 0), area=pygame.Rect(0, 0, bg_width, bg_area_height))
-
-        # Ajouter une surcouche bleue uniquement dans la zone au-dessus du panneau
-        blue_overlay = pygame.Surface((options.screen_width, bg_area_height), pygame.SRCALPHA)
-        blue_overlay.fill(BLUE_OVERLAY)
-        screen.blit(blue_overlay, (0, 0))
 
         # Dessiner le panneau en bas
         screen.blit(panel_rect, (0, options.screen_height - panel_height))
